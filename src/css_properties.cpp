@@ -218,16 +218,13 @@ void litehtml::css_properties::compute(const element* el, const document::ptr& d
 	m_line_height = el->get_length_property(_line_height_, true, normal, offset(m_line_height));
 	if(m_line_height.is_predefined())
 	{
-		m_line_height = (float) m_font_metrics.height;
-		m_lh_predefined = true;
+		m_line_height_resolved = m_font_metrics.height;
 	} else if(m_line_height.units() == css_units_none)
 	{
-		m_line_height = (float)(int) (m_line_height.val() * font_size);
-		m_lh_predefined = false;
+		m_line_height_resolved = (int) (m_line_height.val() * font_size);
 	} else
 	{
-		m_line_height = (float) doc->to_pixels(m_line_height, font_size, font_size);
-		m_lh_predefined = false;
+		m_line_height_resolved = (int) doc->to_pixels(m_line_height, font_size, font_size);
 	}
 
 	m_list_style_type     = (list_style_type)     el->get_enum_property(_list_style_type_,     true, list_style_type_disc,        offset(m_list_style_type));
