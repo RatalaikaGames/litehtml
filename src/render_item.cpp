@@ -848,9 +848,9 @@ void litehtml::render_item::draw_children(uint_ptr hdc, int x, int y, const posi
     position pos = m_pos;
     pos.x += x;
     pos.y += y;
-
-    auto doc = src_el()->get_document_raw();
-
+#if 0 // DPASCA - do this lazily where necessary below
+    document::ptr doc = src_el()->get_document();
+#endif
     if (src_el()->css().get_overflow() > overflow_visible)
     {
         // TODO: Process overflow for inline elements
@@ -866,6 +866,7 @@ void litehtml::render_item::draw_children(uint_ptr hdc, int x, int y, const posi
             bdr_radius -= m_borders;
             bdr_radius -= m_padding;
 
+            document::ptr doc = src_el()->get_document(); // DPASCA - lazy evaluation
             doc->container()->set_clip(pos, bdr_radius, true, true);
         }
     }
@@ -883,6 +884,7 @@ void litehtml::render_item::draw_children(uint_ptr hdc, int x, int y, const posi
                         if (el->src_el()->css().get_position() == element_position_fixed)
                         {
                             position browser_wnd;
+                            document::ptr doc = src_el()->get_document(); // DPASCA - lazy evaluation
                             doc->container()->get_client_rect(browser_wnd);
 
                             el->src_el()->draw(hdc, browser_wnd.x, browser_wnd.y, clip, el);
@@ -949,6 +951,7 @@ void litehtml::render_item::draw_children(uint_ptr hdc, int x, int y, const posi
 
     if (src_el()->css().get_overflow() > overflow_visible)
     {
+        document::ptr doc = src_el()->get_document(); // DPASCA - lazy evaluation
         doc->container()->del_clip();
     }
 }
