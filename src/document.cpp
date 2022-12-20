@@ -765,6 +765,41 @@ void litehtml::document::create_node(void* gnode, elements_vector& elements, boo
 			}
 			else
 			{
+#if 1 // DPASCA - begin block to minimize words split for <pre> tags
+				static const std::string MATCH("</pre>");
+				const auto &end_tag = node->parent->v.element.original_end_tag;
+				if (end_tag.length >= MATCH.size() && !t_strncasecmp( end_tag.data, MATCH.c_str(), MATCH.size() ))
+				{
+					std::string packedStr; // this accumuates text and spaces
+					auto commitElement = [&]()
+					{
+						if (!packedStr.empty()) // create a new element if there's text
+						{
+							elements.push_back(std::make_shared<el_text>(packedStr.c_str(), shared_from_this()));
+							packedStr.clear();
+						}
+					};
+
+					// plain text and spaces are packed together, other white chars generate an el_space
+					m_container->split_text(node->v.text.text,
+						[&](const char* text) { packedStr += text; }, // append text
+						[&](const char* text)
+						{
+							if (!t_strcasecmp(text, " ")) // pure spaces are appended
+							{
+								packedStr += text;
+							}
+							else
+							{   // other white spaces get their own element, just to be safe
+								commitElement();
+								elements.push_back(std::make_shared<el_space>(text, shared_from_this()));
+							}
+						});
+
+					commitElement(); // generate the last element, if any
+				}
+				else
+#endif // DPASCA - end block
 				m_container->split_text(node->v.text.text,
 					[this, &elements](const char* text) { elements.push_back(std::make_shared<el_text>(text, shared_from_this())); },
 					[this, &elements](const char* text) { elements.push_back(std::make_shared<el_space>(text, shared_from_this())); });
