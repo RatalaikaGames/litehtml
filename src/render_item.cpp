@@ -849,7 +849,7 @@ void litehtml::render_item::draw_children(uint_ptr hdc, int x, int y, const posi
     pos.x += x;
     pos.y += y;
 
-    document::ptr doc = src_el()->get_document();
+    auto doc = src_el()->get_document_raw();
 
     if (src_el()->css().get_overflow() > overflow_visible)
     {

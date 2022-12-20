@@ -28,6 +28,9 @@ namespace litehtml
 	protected:
 		std::weak_ptr<element>					m_parent;
 		std::weak_ptr<document>					m_doc;
+#ifdef LITEHTML_USE_DOC_RAW_SPEEDUP
+		document*												m_doc_raw {};
+#endif
 		elements_vector							m_children;
 		css_properties							m_css;
 		std::list<std::weak_ptr<render_item>>	m_renders;
@@ -56,6 +59,12 @@ namespace litehtml
 		bool						is_table_skip() const;
 
 		std::shared_ptr<document>	get_document() const;
+#ifdef LITEHTML_USE_DOC_RAW_SPEEDUP
+		document*	get_document_raw() const { return m_doc_raw; } // use the cached pointer
+#else
+		std::shared_ptr<document>	get_document_raw() const { return m_doc.lock(); } // same as get_document()
+#endif
+
 
 		virtual elements_vector		select_all(const string& selector);
 		virtual elements_vector		select_all(const css_selector& selector);
