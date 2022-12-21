@@ -789,8 +789,12 @@ void litehtml::document::create_node(void* gnode, elements_vector& elements, boo
 							{
 								packedStr += text;
 							}
-							else
-							{   // other white spaces get their own element, just to be safe
+							else // other white spaces get their own element, just to be safe
+							{
+								// Ugly HACK ! TODO: find out why el_space \n does not give empty lines
+								if (!t_strcasecmp(text, "\n"))
+									packedStr += "\n";
+
 								commitElement();
 								elements.push_back(std::make_shared<el_space>(text, shared_from_this()));
 							}
