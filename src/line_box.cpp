@@ -108,7 +108,7 @@ void litehtml::line_box::finish(bool last_box)
         {
             font_metrics fm = el->src_el()->css().get_font_metrics();
             base_line	= std::max(base_line,	fm.base_line());
-            line_height = std::max(line_height, el->src_el()->css().get_line_height_resolved());
+            line_height = std::max(line_height, el->src_el()->css().get_line_height());
             m_height = std::max(m_height, fm.height);
         }
         if (spc_x && counter)

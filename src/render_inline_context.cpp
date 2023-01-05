@@ -219,11 +219,8 @@ int litehtml::render_item_inline_context::new_box(const std::shared_ptr<render_i
         }
     }
 
-    //font_metrics fm = src_el()->css().get_font_metrics();
-    //m_line_boxes.emplace_back(std::unique_ptr<line_box>(new line_box(line_ctx.top, line_ctx.left + first_line_margin + text_indent, line_ctx.right, src_el()->css().get_line_height_resolved(), fm, src_el()->css().get_text_align())));
-
-    font_metrics fm = el->src_el()->css().get_font_metrics();
-    m_line_boxes.emplace_back(std::unique_ptr<line_box>(new line_box(line_ctx.top, line_ctx.left + first_line_margin + text_indent, line_ctx.right, el->src_el()->css().get_line_height_resolved(), fm, el->src_el()->css().get_text_align())));
+    font_metrics fm = src_el()->css().get_font_metrics();
+    m_line_boxes.emplace_back(std::unique_ptr<line_box>(new line_box(line_ctx.top, line_ctx.left + first_line_margin + text_indent, line_ctx.right, src_el()->css().get_line_height(), fm, src_el()->css().get_text_align())));
 
     return line_ctx.top;
 }

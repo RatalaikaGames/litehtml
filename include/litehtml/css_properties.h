@@ -39,7 +39,7 @@ namespace litehtml
 		css_offsets				m_css_offsets;
 		css_length				m_css_text_indent;
 		css_length				m_line_height;
-		int					m_line_height_resolved;
+		bool					m_lh_predefined;
 		list_style_type			m_list_style_type;
 		list_style_position		m_list_style_position;
 		string					m_list_style_image;
@@ -100,7 +100,6 @@ namespace litehtml
 				m_css_offsets(),
 				m_css_text_indent(),
 				m_line_height(0),
-				m_line_height_resolved(0),
 				m_list_style_type(list_style_type_none),
 				m_list_style_position(list_style_position_outside),
 				m_bg(),
@@ -192,9 +191,6 @@ namespace litehtml
 
 		int get_line_height() const;
 		void set_line_height(int mLineHeight);
-
-		int get_line_height_resolved() const;
-		void set_line_height_resolved(int mLineHeightResolved);
 
 		bool is_line_height_predefined() const;
 		void set_line_height_predefined(bool mLhPredefined);
@@ -485,14 +481,14 @@ namespace litehtml
 		m_line_height = (float) mLineHeight;
 	}
 
-	inline void css_properties::set_line_height_resolved(int mLineHeightResolved)
+	inline bool css_properties::is_line_height_predefined() const
 	{
-		m_line_height_resolved = mLineHeightResolved;
+		return m_lh_predefined;
 	}
 
-	inline int css_properties::get_line_height_resolved() const
+	inline void css_properties::set_line_height_predefined(bool mLhPredefined)
 	{
-		return m_line_height_resolved;
+		m_lh_predefined = mLhPredefined;
 	}
 
 	inline list_style_type css_properties::get_list_style_type() const
